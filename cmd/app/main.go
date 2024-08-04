@@ -1,7 +1,11 @@
 package main
 
-import "github.com/Sysleec/Artifacts-client/internal/repl"
+import (
+	"github.com/Sysleec/Artifacts-client/internal/models"
+	"github.com/Sysleec/Artifacts-client/internal/repl"
+)
 
 func main() {
-	repl.Run()
+	cfg := models.Config{}
+	repl.Run(&cfg)
 }
