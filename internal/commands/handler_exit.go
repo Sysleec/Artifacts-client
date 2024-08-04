@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func commandExit(cfg *models.Config, args ...string) error {
+func commandExit(_ *models.Config, _ ...string) error {
 	fmt.Println("closing the Artifacts client...")
 	os.Exit(0)
 	return nil

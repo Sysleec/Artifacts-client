@@ -1,3 +1,5 @@
 package models
 
-type Config struct{}
+type Config struct {
+	Token string
+}

@@ -5,7 +5,7 @@ import (
 	"github.com/Sysleec/Artifacts-client/internal/models"
 )
 
-func commandHelp(cfg *models.Config, args ...string) error {
+func commandHelp(_ *models.Config, _ ...string) error {
 	fmt.Println("Welcome to the Artifacts client help!")
 	fmt.Println("Available List:")
 	for _, comm := range List() {
