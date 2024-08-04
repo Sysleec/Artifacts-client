@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/Sysleec/Artifacts-client/internal/artsapi"
 	"github.com/Sysleec/Artifacts-client/internal/models"
 	"github.com/Sysleec/Artifacts-client/internal/repl"
 	"github.com/Sysleec/Artifacts-client/internal/utils"
+	"time"
 )
 
 func main() {
@@ -17,8 +19,10 @@ func main() {
 		return
 	}
 
+	apiClient := artsapi.NewClient(60*time.Second, tok)
+
 	cfg := models.Config{
-		Token: tok,
+		ApiClient: &apiClient,
 	}
 	repl.Run(&cfg)
 }
