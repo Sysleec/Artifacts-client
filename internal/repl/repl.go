@@ -22,7 +22,7 @@ func Run(cfg *models.Config) {
 
 		wordsSl := commFormatter(words)
 
-		if len(wordsSl) > 2 {
+		if len(wordsSl) > 3 {
 			fmt.Println("Too many args")
 			continue
 		}
