@@ -28,7 +28,9 @@ func Run(cfg *models.Config) {
 		}
 
 		commandName := wordsSl[0]
-		args := []string{}
+
+		var args []string
+
 		if len(wordsSl) > 1 {
 			args = wordsSl[1:]
 		}
@@ -46,8 +48,10 @@ func Run(cfg *models.Config) {
 }
 
 func commFormatter(words string) []string {
-	lower := strings.ToLower(words)
-	wordsSlice := strings.Fields(lower)
+	if !strings.Contains(words, "get") {
+		words = strings.ToLower(words)
+	}
+	wordsSlice := strings.Fields(words)
 
 	return wordsSlice
 }

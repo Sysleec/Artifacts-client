@@ -4,19 +4,20 @@ import (
 	"fmt"
 	"github.com/Sysleec/Artifacts-client/internal/artsapi/characters"
 	"github.com/Sysleec/Artifacts-client/internal/models"
+	"github.com/Sysleec/Artifacts-client/internal/utils"
 )
 
 func commandGetCharacter(cfg *models.Config, args ...string) error {
 	characterName := args[0]
 
-	client := cfg.ApiClient
-	wrapper := characters.ClientWrapper{Client: client}
+	client := characters.ClientWrapper{Client: cfg.ApiClient}
 
-	character, err := wrapper.Get(characterName)
+	character, err := client.Get(characterName)
 	if err != nil {
 		return fmt.Errorf("failed to create character: %w", err)
 	}
 
-	fmt.Printf("get character: %s\n", character.Data.Name)
+	utils.CharacterPrettyPrinter(character.Data)
+
 	return nil
 }

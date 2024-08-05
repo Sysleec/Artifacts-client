@@ -14,15 +14,14 @@ func commandCreateCharacter(cfg *models.Config, args ...string) error {
 	characterName := args[0]
 	characterSkin := args[1]
 
-	client := cfg.ApiClient
-	wrapper := characters.ClientWrapper{Client: client}
+	client := characters.ClientWrapper{Client: cfg.ApiClient}
 
 	request := models.CharacterCreateRequest{
 		Name: characterName,
 		Skin: characterSkin,
 	}
 
-	character, err := wrapper.Create(request)
+	character, err := client.Create(request)
 	if err != nil {
 		return fmt.Errorf("failed to create character: %w", err)
 	}
