@@ -10,18 +10,18 @@ type cliCommand struct {
 
 func List() map[string]cliCommand {
 	return map[string]cliCommand{
-		"delete": {
-			name:        "delete",
+		"delete character": {
+			name:        "delete character <name>",
 			description: "Delete a character by name",
 			Callback:    commandDeleteCharacter,
 		},
-		"get": {
-			name:        "get",
+		"get character": {
+			name:        "get character <name>",
 			description: "Get a character by name",
 			Callback:    commandGetCharacter,
 		},
-		"create": {
-			name:        "create",
+		"create character": {
+			name:        "create character <name> <skin>",
 			description: "Create a new character",
 			Callback:    commandCreateCharacter,
 		},

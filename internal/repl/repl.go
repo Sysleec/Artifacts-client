@@ -22,26 +22,30 @@ func Run(cfg *models.Config) {
 
 		wordsSl := commFormatter(words)
 
-		if len(wordsSl) > 3 {
+		if len(wordsSl) > 4 {
 			fmt.Println("Too many args")
 			continue
 		}
 
-		commandName := wordsSl[0]
-
+		var commandName string
 		var args []string
 
-		if len(wordsSl) > 1 {
-			args = wordsSl[1:]
+		// Find the command in the command list
+		for i := len(wordsSl); i > 0; i-- {
+			commandName = strings.Join(wordsSl[:i], " ")
+			if comm, ok := commands.List()[commandName]; ok {
+				args = wordsSl[i:]
+				err := comm.Callback(cfg, args...)
+				if err != nil {
+					fmt.Println(err)
+				}
+				break
+			}
+			// If command not found
+			commandName = ""
 		}
 
-		comm, ok := commands.List()[commandName]
-		if ok {
-			err := comm.Callback(cfg, args...)
-			if err != nil {
-				fmt.Println(err)
-			}
-		} else {
+		if commandName == "" {
 			fmt.Println("Command not found")
 		}
 	}
