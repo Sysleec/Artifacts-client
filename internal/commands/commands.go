@@ -10,6 +10,11 @@ type cliCommand struct {
 
 func List() map[string]cliCommand {
 	return map[string]cliCommand{
+		"select character": {
+			name:        "select character <name>",
+			description: "select a character by name for actions",
+			Callback:    commandSelectCharacter,
+		},
 		"delete character": {
 			name:        "delete character <name>",
 			description: "Delete a character by name",

@@ -12,6 +12,7 @@ import (
 type Client struct {
 	httpClient http.Client
 	token      string
+	Character  string
 }
 
 func NewClient(interval time.Duration, token string) Client {

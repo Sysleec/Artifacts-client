@@ -15,6 +15,10 @@ type CharacterResponse struct {
 	Data Character `json:"data"`
 }
 
+type MyCharactersResponse struct {
+	Data []Character `json:"data"`
+}
+
 type InventoryItem struct {
 	Slot     int    `json:"slot"`
 	Code     string `json:"code"`
