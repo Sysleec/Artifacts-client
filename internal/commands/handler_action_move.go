@@ -15,7 +15,10 @@ func commandMove(cfg *models.Config, args ...string) error {
 	moveX := args[0]
 	moveY := args[1]
 
-	client := action.ClientWrapper{Client: cfg.ApiClient}
+	client, err := action.NewClientWrapper(cfg.ApiClient)
+	if err != nil {
+		return fmt.Errorf("failed to action : %w", err)
+	}
 
 	moveXInt, err := strconv.Atoi(moveX)
 	if err != nil {
