@@ -6,13 +6,13 @@ import (
 	"github.com/Sysleec/Artifacts-client/internal/models"
 )
 
-func (c *ClientWrapper) Create(request models.CharacterCreateRequest) (models.CharacterResponse, error) {
+func (c *ClientWrapper) Delete(request models.CharacterDeleteRequest) (models.CharacterResponse, error) {
 	body, err := json.Marshal(request)
 	if err != nil {
 		return models.CharacterResponse{}, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	resp, err := c.Client.PostReq("/characters/create", body)
+	resp, err := c.Client.PostReq("/characters/delete", body)
 	if err != nil {
 		return models.CharacterResponse{}, fmt.Errorf("failed to send request: %w", err)
 	}

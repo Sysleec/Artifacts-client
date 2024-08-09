@@ -7,6 +7,10 @@ type CharacterCreateRequest struct {
 	Skin string `json:"skin"`
 }
 
+type CharacterDeleteRequest struct {
+	Name string `json:"name"`
+}
+
 type CharacterResponse struct {
 	Data Character `json:"data"`
 }
