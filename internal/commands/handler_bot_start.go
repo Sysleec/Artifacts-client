@@ -12,12 +12,16 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 		return fmt.Errorf("expected exactly 3 arguments, got %d", len(args))
 	}
 
+	character := args[0]
+
+	if cfg.ApiClient.BotRunning[character] == true {
+		return fmt.Errorf("bot for character %s is already running", character)
+	}
+
 	client, err := bot.NewClientWrapper(cfg.ApiClient)
 	if err != nil {
 		return fmt.Errorf("failed to action : %w", err)
 	}
-
-	character := args[0]
 
 	err = utils.CheckCharacter(cfg, character)
 	if err != nil {

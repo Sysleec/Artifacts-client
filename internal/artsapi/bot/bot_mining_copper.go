@@ -42,6 +42,8 @@ func (c *ClientWrapper) goToCopper(char string) error {
 		return fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
+	fmt.Println("Moving to copper...")
+
 	time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
 
 	return nil
