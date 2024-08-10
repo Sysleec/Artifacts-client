@@ -10,6 +10,11 @@ type cliCommand struct {
 
 func List() map[string]cliCommand {
 	return map[string]cliCommand{
+		"gather": {
+			name:        "gather",
+			description: "Gather resources",
+			Callback:    commandGather,
+		},
 		"move": {
 			name:        "move <x> <y>",
 			description: "Move the selected character to the specified coordinates",
