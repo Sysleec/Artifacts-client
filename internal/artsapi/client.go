@@ -13,6 +13,7 @@ type Client struct {
 	httpClient http.Client
 	token      string
 	Character  string
+	BotRunning map[string]bool
 }
 
 func NewClient(interval time.Duration, token string) Client {
@@ -20,7 +21,8 @@ func NewClient(interval time.Duration, token string) Client {
 		httpClient: http.Client{
 			Timeout: interval,
 		},
-		token: token,
+		token:      token,
+		BotRunning: make(map[string]bool),
 	}
 }
 
@@ -53,7 +55,7 @@ func (c *Client) PostReq(path string, body []byte) ([]byte, error) {
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
 
-	if res.StatusCode != http.StatusOK {
+	if res.StatusCode != http.StatusOK && res.StatusCode != 490 {
 		log.Error().Msgf("response: %s", string(resp)) // for debugging purposes
 		return nil, fmt.Errorf("wrong status code: %d", res.StatusCode)
 	}

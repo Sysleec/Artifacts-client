@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Sysleec/Artifacts-client/internal/artsapi/characters"
 	"github.com/Sysleec/Artifacts-client/internal/models"
+	"github.com/Sysleec/Artifacts-client/internal/utils"
 )
 
 func commandSelectCharacter(cfg *models.Config, args ...string) error {
@@ -11,29 +12,16 @@ func commandSelectCharacter(cfg *models.Config, args ...string) error {
 		return fmt.Errorf("expected exactly 1 argument, got %d", len(args))
 	}
 
-	characterName := args[0]
+	character := args[0]
+
+	err := utils.CheckCharacter(cfg, character)
+	if err != nil {
+		return fmt.Errorf("failed to check character: %w", err)
+	}
 
 	client := characters.ClientWrapper{Client: cfg.ApiClient}
 
-	myCharacters, err := client.GetMyCharacters()
-	if err != nil {
-		return fmt.Errorf("failed to get my myCharacters: %w", err)
-	}
-
-	found := false
-
-	for _, character := range myCharacters.Data {
-		if character.Name == characterName {
-			found = true
-			break
-		}
-	}
-
-	if !found {
-		return fmt.Errorf("your character not found: %s", characterName)
-	}
-
-	client.Client.Character = characterName
+	client.Client.Character = character
 
 	fmt.Printf("selected character: %s\n", client.Client.Character)
 	return nil

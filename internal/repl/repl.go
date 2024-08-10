@@ -27,7 +27,7 @@ func executor(cfg *models.Config) func(string) {
 
 		wordsSl := commFormatter(input)
 
-		if len(wordsSl) > 4 {
+		if len(wordsSl) > 5 {
 			fmt.Println("Too many args")
 			return
 		}
