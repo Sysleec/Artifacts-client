@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Sysleec/Artifacts-client/internal/artsapi/action"
 	"github.com/Sysleec/Artifacts-client/internal/models"
+	"time"
 )
 
 func commandGather(cfg *models.Config, args ...string) error {
@@ -22,6 +23,17 @@ func commandGather(cfg *models.Config, args ...string) error {
 	}
 
 	fmt.Printf("Gathered resources at x = %d, y = %d\n", character.Data.Destination.X, character.Data.Destination.Y)
+
+	secondsRemaining := character.Data.Cooldown.TotalSeconds
+	fmt.Printf("Waiting for %d seconds\n", secondsRemaining)
+
+	for secondsRemaining > 0 {
+		fmt.Printf("\rTime left: %d seconds", secondsRemaining)
+		time.Sleep(1 * time.Second)
+		secondsRemaining--
+	}
+
+	fmt.Print("\rCooldown complete!              \n")
 
 	return nil
 }
