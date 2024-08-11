@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/Sysleec/Artifacts-client/internal/models"
+	"github.com/Sysleec/Artifacts-client/internal/utils"
 	"time"
 )
 
@@ -61,6 +62,12 @@ func (c *ClientWrapper) gatherCopper(char string) {
 		err = json.Unmarshal(resp, &action)
 		if err != nil {
 			fmt.Errorf("failed to unmarshal response: %w", err)
+			return
+		}
+
+		err = utils.CheckMaxItems(action)
+		if err != nil {
+			fmt.Errorf("max items reached: %w", err)
 			return
 		}
 
