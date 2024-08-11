@@ -5,6 +5,7 @@ import (
 	"github.com/Sysleec/Artifacts-client/internal/commands"
 	"github.com/Sysleec/Artifacts-client/internal/models"
 	"github.com/c-bata/go-prompt"
+	"regexp"
 	"strings"
 )
 
@@ -60,5 +61,19 @@ func commFormatter(words string) []string {
 	if !strings.Contains(words, "get") {
 		words = strings.ToLower(words)
 	}
-	return strings.Fields(words)
+	return splitQuotedWords(words)
+}
+
+func splitQuotedWords(s string) []string {
+	re := regexp.MustCompile(`\"[^\"]+\"|\S+`)
+	matches := re.FindAllString(s, -1)
+
+	for i, match := range matches {
+		if len(match) > 0 && match[0] == '"' {
+			match = match[1 : len(match)-1]
+			matches[i] = match
+		}
+	}
+
+	return matches
 }

@@ -2,6 +2,11 @@ package models
 
 import "time"
 
+type CraftReq struct {
+	Code     string `json:"code"`
+	Quantity int    `json:"quantity"`
+}
+
 type MoveReq struct {
 	X int `json:"x"`
 	Y int `json:"y"`
