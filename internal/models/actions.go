@@ -21,6 +21,12 @@ type MoveReq struct {
 	Y int `json:"y"`
 }
 
+type BuyReq struct {
+	Code     string `json:"code"`
+	Quantity int    `json:"quantity"`
+	Price    int    `json:"price"`
+}
+
 type SellReq struct {
 	Code     string `json:"code"`
 	Quantity int    `json:"quantity"`

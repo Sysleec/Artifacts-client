@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func commandSell(cfg *models.Config, args ...string) error {
+func commandBuy(cfg *models.Config, args ...string) error {
 	if len(args) != 2 {
 		return fmt.Errorf("expected exactly 2 arguments, got %d", len(args))
 	}
@@ -20,6 +20,29 @@ func commandSell(cfg *models.Config, args ...string) error {
 	client, err := action.NewClientWrapper(cfg.ApiClient)
 	if err != nil {
 		return fmt.Errorf("failed to action : %w", err)
+	}
+
+	geClient, err := ge.NewClientWrapper(cfg.ApiClient)
+	if err != nil {
+		return fmt.Errorf("failed to action : %w", err)
+	}
+
+	qty, err := strconv.Atoi(args[1])
+	if err != nil {
+		return fmt.Errorf("qty must be an integer: %w", err)
+	}
+
+	geItem, err := geClient.GetItem(target)
+	if err != nil {
+		return fmt.Errorf("failed to get Grand Exchange item : %w", err)
+	}
+
+	price := geItem.Data.BuyPrice
+
+	request := models.BuyReq{
+		Code:     target,
+		Quantity: qty,
+		Price:    price,
 	}
 
 	var actionMove models.Action
@@ -46,35 +69,12 @@ func commandSell(cfg *models.Config, args ...string) error {
 
 	fmt.Print("\rCooldown complete!              \n")
 
-	geClient, err := ge.NewClientWrapper(cfg.ApiClient)
-	if err != nil {
-		return fmt.Errorf("failed to action : %w", err)
-	}
-
-	qty, err := strconv.Atoi(args[1])
-	if err != nil {
-		return fmt.Errorf("qty must be an integer: %w", err)
-	}
-
-	geItem, err := geClient.GetItem(target)
-	if err != nil {
-		return fmt.Errorf("failed to get Grand Exchange item : %w", err)
-	}
-
-	price := geItem.Data.SellPrice
-
-	request := models.SellReq{
-		Code:     target,
-		Quantity: qty,
-		Price:    price,
-	}
-
-	character, err := client.Sell(request)
+	character, err := client.Buy(request)
 	if err != nil {
 		return fmt.Errorf("failed to sell: %w", err)
 	}
 
-	fmt.Printf("Sold %d %s for %d gold\n", qty, target, price)
+	fmt.Printf("Bought %d %s for %d gold\n", qty, target, price)
 
 	secondsRemaining = character.Data.Cooldown.TotalSeconds
 	fmt.Printf("Waiting for %d seconds\n", secondsRemaining)
