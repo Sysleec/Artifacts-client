@@ -15,6 +15,11 @@ func List() map[string]cliCommand {
 			description: "Sell an item",
 			Callback:    commandSell,
 		},
+		"unequip": {
+			name:        "unequip <slot>",
+			description: "Unequip an item",
+			Callback:    commandUnequip,
+		},
 		"equip": {
 			name:        "equip <item_code> <slot>",
 			description: "Equip an item",

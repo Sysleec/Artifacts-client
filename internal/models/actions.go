@@ -7,6 +7,10 @@ type CraftReq struct {
 	Quantity int    `json:"quantity"`
 }
 
+type UnEquipReq struct {
+	Slot string `json:"slot"`
+}
+
 type EquipReq struct {
 	Code string `json:"code"`
 	Slot string `json:"slot"`
