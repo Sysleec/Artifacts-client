@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"github.com/Sysleec/Artifacts-client/internal/artsapi/action"
+	"github.com/Sysleec/Artifacts-client/internal/artsapi/ge"
 	"github.com/Sysleec/Artifacts-client/internal/models"
 	"strconv"
 	"strings"
@@ -10,8 +11,8 @@ import (
 )
 
 func commandSell(cfg *models.Config, args ...string) error {
-	if len(args) != 3 {
-		return fmt.Errorf("expected exactly 3 arguments, got %d", len(args))
+	if len(args) != 2 {
+		return fmt.Errorf("expected exactly 2 arguments, got %d", len(args))
 	}
 
 	target := strings.ToLower(args[0])
@@ -21,15 +22,22 @@ func commandSell(cfg *models.Config, args ...string) error {
 		return fmt.Errorf("failed to action : %w", err)
 	}
 
+	geClient, err := ge.NewClientWrapper(cfg.ApiClient)
+	if err != nil {
+		return fmt.Errorf("failed to action : %w", err)
+	}
+
 	qty, err := strconv.Atoi(args[1])
 	if err != nil {
 		return fmt.Errorf("qty must be an integer: %w", err)
 	}
 
-	price, err := strconv.Atoi(args[2])
+	geItem, err := geClient.GetItem(target)
 	if err != nil {
-		return fmt.Errorf("qty must be an integer: %w", err)
+		return fmt.Errorf("failed to get Grand Exchange item : %w", err)
 	}
+
+	price := geItem.Data.SellPrice
 
 	request := models.SellReq{
 		Code:     target,

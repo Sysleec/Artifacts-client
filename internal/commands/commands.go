@@ -11,7 +11,7 @@ type cliCommand struct {
 func List() map[string]cliCommand {
 	return map[string]cliCommand{
 		"sell": {
-			name:        "sell <item_code> <amount> <price>",
+			name:        "sell <item_code> <amount>",
 			description: "Sell an item",
 			Callback:    commandSell,
 		},
