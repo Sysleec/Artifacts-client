@@ -5,6 +5,7 @@ import (
 	"github.com/Sysleec/Artifacts-client/internal/artsapi/action"
 	"github.com/Sysleec/Artifacts-client/internal/models"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -13,7 +14,7 @@ func commandCraft(cfg *models.Config, args ...string) error {
 		return fmt.Errorf("expected exactly 2 arguments, got %d", len(args))
 	}
 
-	target := args[0]
+	target := strings.ToLower(args[0])
 
 	client, err := action.NewClientWrapper(cfg.ApiClient)
 	if err != nil {

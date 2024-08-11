@@ -19,7 +19,42 @@ func (c *ClientWrapper) Craft(req models.CraftReq) (models.Action, error) {
 		if err != nil {
 			return models.Action{}, err
 		}
-
+		actionMove = act
+	case "copper_ring":
+		act, err := c.Move(models.MoveReq{
+			X: 1,
+			Y: 3,
+		})
+		if err != nil {
+			return models.Action{}, err
+		}
+		actionMove = act
+	case "copper_dagger":
+		act, err := c.Move(models.MoveReq{
+			X: 2,
+			Y: 1,
+		})
+		if err != nil {
+			return models.Action{}, err
+		}
+		actionMove = act
+	case "copper_boots":
+		act, err := c.Move(models.MoveReq{
+			X: 3,
+			Y: 1,
+		})
+		if err != nil {
+			return models.Action{}, err
+		}
+		actionMove = act
+	case "copper_helmet":
+		act, err := c.Move(models.MoveReq{
+			X: 3,
+			Y: 1,
+		})
+		if err != nil {
+			return models.Action{}, err
+		}
 		actionMove = act
 	default:
 		return models.Action{}, fmt.Errorf("unknown target: %s", req.Code)
