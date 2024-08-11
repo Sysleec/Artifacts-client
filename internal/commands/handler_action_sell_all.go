@@ -54,16 +54,24 @@ func commandSellAll(cfg *models.Config, args ...string) error {
 	}
 
 	for _, item := range char.Inventory {
+		if item.Code == "tasks_coin" || item.Code == "Tasks Coin" || item.Quantity == 0 {
+			continue
+		}
 		geItem, err := geClient.GetItem(item.Code)
 		if err != nil {
 			return fmt.Errorf("failed to get Grand Exchange item : %w", err)
 		}
 
 		price := geItem.Data.SellPrice
+		qty := item.Quantity
+
+		if item.Quantity > 50 {
+			qty = 50
+		}
 
 		request := models.SellReq{
 			Code:     geItem.Data.Code,
-			Quantity: item.Quantity,
+			Quantity: qty,
 			Price:    price,
 		}
 
