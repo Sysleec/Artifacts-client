@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Sysleec/Artifacts-client/internal/artsapi/action"
 	"github.com/Sysleec/Artifacts-client/internal/models"
+	"github.com/Sysleec/Artifacts-client/internal/utils"
 	"time"
 )
 
@@ -19,7 +20,7 @@ func commandGather(cfg *models.Config, args ...string) error {
 
 	character, err := client.Gathering()
 	if err != nil {
-		return fmt.Errorf("failed to move character: %w", err)
+		return fmt.Errorf("failed to gather resources: %w", err)
 	}
 
 	fmt.Printf("Gathered resources at x = %d, y = %d\n", character.Data.Destination.X, character.Data.Destination.Y)
@@ -34,6 +35,11 @@ func commandGather(cfg *models.Config, args ...string) error {
 	}
 
 	fmt.Print("\rCooldown complete!              \n")
+
+	err = utils.CheckMaxItems(character)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

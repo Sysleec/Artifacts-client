@@ -54,20 +54,20 @@ func (c *ClientWrapper) gatherCopper(char string) {
 	for c.Client.BotRunning[char] {
 		resp, err := c.Client.PostReq("/my/"+char+"/action/gathering", []byte{})
 		if err != nil {
-			fmt.Errorf("failed to send request: %w", err)
+			fmt.Printf("failed to send request: %w", err)
 			return
 		}
 
 		var action models.Action
 		err = json.Unmarshal(resp, &action)
 		if err != nil {
-			fmt.Errorf("failed to unmarshal response: %w", err)
+			fmt.Printf("failed to unmarshal response: %w", err)
 			return
 		}
 
 		err = utils.CheckMaxItems(action)
 		if err != nil {
-			fmt.Errorf("max items reached: %w", err)
+			fmt.Printf("max items reached: %w", err)
 			return
 		}
 
