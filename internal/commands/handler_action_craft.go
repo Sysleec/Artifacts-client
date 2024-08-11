@@ -61,6 +61,15 @@ func commandCraft(cfg *models.Config, args ...string) error {
 			return err
 		}
 		actionMove = act
+	case "sticky_dagger":
+		act, err := client.Move(models.MoveReq{
+			X: 2,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
 	case "copper_boots":
 		act, err := client.Move(models.MoveReq{
 			X: 3,
@@ -71,6 +80,33 @@ func commandCraft(cfg *models.Config, args ...string) error {
 		}
 		actionMove = act
 	case "copper_helmet":
+		act, err := client.Move(models.MoveReq{
+			X: 3,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "copper_legs_armor":
+		act, err := client.Move(models.MoveReq{
+			X: 3,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "feather_coat":
+		act, err := client.Move(models.MoveReq{
+			X: 3,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "body_armor":
 		act, err := client.Move(models.MoveReq{
 			X: 3,
 			Y: 1,
