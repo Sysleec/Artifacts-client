@@ -124,6 +124,69 @@ func commandCraft(cfg *models.Config, args ...string) error {
 			return err
 		}
 		actionMove = act
+	case "cooked_gudgeon":
+		act, err := client.Move(models.MoveReq{
+			X: 1,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "cooked_beef":
+		act, err := client.Move(models.MoveReq{
+			X: 1,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "cooked_shrimp":
+		act, err := client.Move(models.MoveReq{
+			X: 1,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "cheese":
+		act, err := client.Move(models.MoveReq{
+			X: 1,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "fried_eggs":
+		act, err := client.Move(models.MoveReq{
+			X: 1,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "mushroom_soup":
+		act, err := client.Move(models.MoveReq{
+			X: 1,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "beef_stew":
+		act, err := client.Move(models.MoveReq{
+			X: 1,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
 	default:
 		return fmt.Errorf("unknown target: %s", request.Code)
 	}

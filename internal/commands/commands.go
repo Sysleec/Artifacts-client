@@ -20,6 +20,11 @@ func List() map[string]cliCommand {
 			description: "Fight a monster",
 			Callback:    commandFight,
 		},
+		"sell all": {
+			name:        "sell all",
+			description: "Sell all items",
+			Callback:    commandSellAll,
+		},
 		"sell": {
 			name:        "sell <item_code> <amount>",
 			description: "Sell an item",
