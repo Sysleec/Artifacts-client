@@ -42,6 +42,8 @@ func (c *ClientWrapper) Fighting(monster, char string) error {
 			X: 2,
 			Y: -1,
 		}
+	default:
+		return fmt.Errorf("unknown target: %s", monster)
 	}
 
 	err := c.goToSpot(coords, char)

@@ -62,7 +62,7 @@ func commandSellAll(cfg *models.Config, args ...string) error {
 		price := geItem.Data.SellPrice
 
 		request := models.SellReq{
-			Code:     item.Code,
+			Code:     geItem.Data.Code,
 			Quantity: item.Quantity,
 			Price:    price,
 		}

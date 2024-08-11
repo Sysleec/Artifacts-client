@@ -71,6 +71,21 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 			if err != nil {
 				return fmt.Errorf("failed to fighting chicken: %w", err)
 			}
+		case "blue_slime":
+			err := client.Fighting("blue_slime", character)
+			if err != nil {
+				return fmt.Errorf("failed to fighting chicken: %w", err)
+			}
+		case "yellow_slime":
+			err := client.Fighting("yellow_slime", character)
+			if err != nil {
+				return fmt.Errorf("failed to fighting chicken: %w", err)
+			}
+		case "red_slime":
+			err := client.Fighting("red_slime", character)
+			if err != nil {
+				return fmt.Errorf("failed to fighting chicken: %w", err)
+			}
 		}
 	default:
 		return fmt.Errorf("unknown action: %s", args[1])
