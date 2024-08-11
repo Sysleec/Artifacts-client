@@ -53,6 +53,14 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 			}
 
 		}
+		switch args[2] {
+		case "cow":
+			err := client.FightingCow(character)
+			if err != nil {
+				return fmt.Errorf("failed to fighting chicken: %w", err)
+			}
+
+		}
 	default:
 		return fmt.Errorf("unknown action: %s", args[1])
 	}
