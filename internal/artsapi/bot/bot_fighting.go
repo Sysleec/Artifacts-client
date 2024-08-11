@@ -29,6 +29,21 @@ func (c *ClientWrapper) Fighting(monster, char string) error {
 			X: 3,
 			Y: -2,
 		}
+	case "yellow_slime":
+		coords = models.MoveReq{
+			X: 4,
+			Y: -1,
+		}
+	case "red_slime":
+		coords = models.MoveReq{
+			X: 1,
+			Y: -1,
+		}
+	case "blue_slime":
+		coords = models.MoveReq{
+			X: 2,
+			Y: -1,
+		}
 	}
 
 	err := c.goToSpot(coords, char)
