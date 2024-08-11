@@ -8,23 +8,23 @@ import (
 	"time"
 )
 
-func (c *ClientWrapper) MiningCopper(char string) error {
+func (c *ClientWrapper) FightingChicken(char string) error {
 	c.Client.BotRunning[char] = true
 
-	err := c.goToCopper(char)
+	err := c.goToChicken(char)
 	if err != nil {
-		return fmt.Errorf("failed to go to copper: %w", err)
+		return fmt.Errorf("failed to go to chicken: %w", err)
 	}
 
-	go c.gatherCopper(char)
+	go c.fightChicken(char)
 
 	return nil
 }
 
-func (c *ClientWrapper) goToCopper(char string) error {
+func (c *ClientWrapper) goToChicken(char string) error {
 	req := models.MoveReq{
-		X: 2,
-		Y: 0,
+		X: 0,
+		Y: 1,
 	}
 
 	body, err := json.Marshal(req)
@@ -43,16 +43,16 @@ func (c *ClientWrapper) goToCopper(char string) error {
 		return fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
-	fmt.Println("Moving to copper...")
+	fmt.Println("Moving to chickens...")
 
 	time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
 
 	return nil
 }
 
-func (c *ClientWrapper) gatherCopper(char string) {
+func (c *ClientWrapper) fightChicken(char string) {
 	for c.Client.BotRunning[char] {
-		resp, err := c.Client.PostReq("/my/"+char+"/action/gathering", []byte{})
+		resp, err := c.Client.PostReq("/my/"+char+"/action/fight", []byte{})
 		if err != nil {
 			fmt.Printf("failed to send request: %s", err.Error())
 			return
@@ -73,5 +73,5 @@ func (c *ClientWrapper) gatherCopper(char string) {
 
 		time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
 	}
-	fmt.Printf("\rMining copper for %s stopped              \n", char)
+	fmt.Printf("\rFighting chicken bot for character %s stopped			\n", char)
 }
