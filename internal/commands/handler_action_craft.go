@@ -31,6 +31,71 @@ func commandCraft(cfg *models.Config, args ...string) error {
 		Quantity: qty,
 	}
 
+	var actionMove models.Action
+
+	switch request.Code {
+	case "copper":
+		act, err := client.Move(models.MoveReq{
+			X: 1,
+			Y: 5,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "copper_ring":
+		act, err := client.Move(models.MoveReq{
+			X: 1,
+			Y: 3,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "copper_dagger":
+		act, err := client.Move(models.MoveReq{
+			X: 2,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "copper_boots":
+		act, err := client.Move(models.MoveReq{
+			X: 3,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	case "copper_helmet":
+		act, err := client.Move(models.MoveReq{
+			X: 3,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
+	default:
+		return fmt.Errorf("unknown target: %s", request.Code)
+	}
+
+	fmt.Printf("Moved character to x = %d, y = %d\n", actionMove.Data.Destination.X, actionMove.Data.Destination.Y)
+
+	secondsRemaining := actionMove.Data.Cooldown.TotalSeconds
+	fmt.Printf("Waiting for %d seconds\n", secondsRemaining)
+
+	for secondsRemaining > 0 {
+		fmt.Printf("\rTime left: %d seconds", secondsRemaining)
+		time.Sleep(1 * time.Second)
+		secondsRemaining--
+	}
+
+	fmt.Print("\rCooldown complete!              \n")
+
 	character, err := client.Craft(request)
 	if err != nil {
 		return fmt.Errorf("failed to craft: %w", err)
@@ -38,7 +103,7 @@ func commandCraft(cfg *models.Config, args ...string) error {
 
 	fmt.Printf("Crafted %d %s\n", qty, target)
 
-	secondsRemaining := character.Data.Cooldown.TotalSeconds
+	secondsRemaining = character.Data.Cooldown.TotalSeconds
 	fmt.Printf("Waiting for %d seconds\n", secondsRemaining)
 
 	for secondsRemaining > 0 {
