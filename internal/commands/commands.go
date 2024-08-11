@@ -10,6 +10,11 @@ type cliCommand struct {
 
 func List() map[string]cliCommand {
 	return map[string]cliCommand{
+		"fight": {
+			name:        "fight",
+			description: "Fight a monster",
+			Callback:    commandFight,
+		},
 		"sell": {
 			name:        "sell <item_code> <amount>",
 			description: "Sell an item",
