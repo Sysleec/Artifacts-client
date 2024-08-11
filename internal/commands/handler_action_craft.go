@@ -79,6 +79,15 @@ func commandCraft(cfg *models.Config, args ...string) error {
 			return err
 		}
 		actionMove = act
+	case "cooked_chicken":
+		act, err := client.Move(models.MoveReq{
+			X: 1,
+			Y: 1,
+		})
+		if err != nil {
+			return err
+		}
+		actionMove = act
 	default:
 		return fmt.Errorf("unknown target: %s", request.Code)
 	}
