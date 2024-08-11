@@ -14,7 +14,7 @@ func commandSelectCharacter(cfg *models.Config, args ...string) error {
 
 	character := args[0]
 
-	err := utils.CheckCharacter(cfg, character)
+	_, err := utils.CheckCharacter(cfg, character)
 	if err != nil {
 		return fmt.Errorf("failed to check character: %w", err)
 	}

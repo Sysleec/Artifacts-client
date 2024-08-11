@@ -23,9 +23,14 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 		return fmt.Errorf("failed to action : %w", err)
 	}
 
-	err = utils.CheckCharacter(cfg, character)
+	char, err := utils.CheckCharacter(cfg, character)
 	if err != nil {
 		return fmt.Errorf("failed to check character: %w", err)
+	}
+
+	err = utils.CheckMaxItems(char)
+	if err != nil {
+		return err
 	}
 
 	switch args[1] {

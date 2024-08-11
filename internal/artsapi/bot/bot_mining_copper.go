@@ -65,7 +65,7 @@ func (c *ClientWrapper) gatherCopper(char string) {
 			return
 		}
 
-		err = utils.CheckMaxItems(action)
+		err = utils.CheckMaxItems(models.ConvertToModelCharacter(action))
 		if err != nil {
 			fmt.Printf("max items reached: %w", err)
 			return
