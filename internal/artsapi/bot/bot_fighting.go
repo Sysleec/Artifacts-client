@@ -8,23 +8,43 @@ import (
 	"time"
 )
 
-func (c *ClientWrapper) FightingChicken(char string) error {
+func (c *ClientWrapper) Fighting(monster, char string) error {
 	c.Client.BotRunning[char] = true
 
-	err := c.goToChicken(char)
-	if err != nil {
-		return fmt.Errorf("failed to go to chicken: %w", err)
+	var coords models.MoveReq
+
+	switch monster {
+	case "chicken":
+		coords = models.MoveReq{
+			X: 0,
+			Y: 1,
+		}
+	case "cow":
+		coords = models.MoveReq{
+			X: 0,
+			Y: 2,
+		}
+	case "green_slime":
+		coords = models.MoveReq{
+			X: 3,
+			Y: -2,
+		}
 	}
 
-	go c.fightChicken(char)
+	err := c.goToSpot(coords, char)
+	if err != nil {
+		return fmt.Errorf("failed to go to %s: %w", monster, err)
+	}
+
+	go c.fight(char)
 
 	return nil
 }
 
-func (c *ClientWrapper) goToChicken(char string) error {
+func (c *ClientWrapper) goToSpot(coords models.MoveReq, char string) error {
 	req := models.MoveReq{
-		X: 0,
-		Y: 1,
+		X: coords.X,
+		Y: coords.Y,
 	}
 
 	body, err := json.Marshal(req)
@@ -43,14 +63,14 @@ func (c *ClientWrapper) goToChicken(char string) error {
 		return fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
-	fmt.Println("Moving to chickens...")
+	fmt.Printf("Moving to spot...\n")
 
 	time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
 
 	return nil
 }
 
-func (c *ClientWrapper) fightChicken(char string) {
+func (c *ClientWrapper) fight(char string) {
 	for c.Client.BotRunning[char] {
 		resp, err := c.Client.PostReq("/my/"+char+"/action/fight", []byte{})
 		if err != nil {
@@ -73,5 +93,5 @@ func (c *ClientWrapper) fightChicken(char string) {
 
 		time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
 	}
-	fmt.Printf("\rFighting chicken bot for character %s stopped			\n", char)
+	fmt.Printf("\rFighting bot for character %s stopped			\n", char)
 }

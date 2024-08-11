@@ -22,13 +22,32 @@ func commandEquip(cfg *models.Config, args ...string) error {
 		Slot: args[1],
 	}
 
-	character, err := client.Equip(request)
+	requestUnEquip := models.UnEquipReq{
+		Slot: args[1],
+	}
+
+	character, _ := client.UnEquip(requestUnEquip)
+
+	fmt.Printf("Unequipped item from slot %s\n", args[1])
+
+	secondsRemaining := character.Data.Cooldown.TotalSeconds
+	fmt.Printf("Waiting for %d seconds\n", secondsRemaining)
+
+	for secondsRemaining > 0 {
+		fmt.Printf("\rTime left: %d seconds", secondsRemaining)
+		time.Sleep(1 * time.Second)
+		secondsRemaining--
+	}
+
+	fmt.Print("\rCooldown complete!              \n")
+
+	character, err = client.Equip(request)
 	if err != nil {
 		return fmt.Errorf("failed to equip character: %w", err)
 	}
 	fmt.Printf("Equipped item %s to slot %s\n", args[0], args[1])
 
-	secondsRemaining := character.Data.Cooldown.TotalSeconds
+	secondsRemaining = character.Data.Cooldown.TotalSeconds
 	fmt.Printf("Waiting for %d seconds\n", secondsRemaining)
 
 	for secondsRemaining > 0 {
