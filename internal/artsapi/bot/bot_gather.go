@@ -8,23 +8,43 @@ import (
 	"time"
 )
 
-func (c *ClientWrapper) MiningCopper(char string) error {
-	c.Client.BotRunning[char] = true
+func (c *ClientWrapper) Gather(resource, char string) error {
+	var coords models.MoveReq
 
-	err := c.goToCopper(char)
-	if err != nil {
-		return fmt.Errorf("failed to go to copper: %w", err)
+	switch resource {
+	case "copper":
+		coords = models.MoveReq{
+			X: 2,
+			Y: 0,
+		}
+	case "gudgeon":
+		coords = models.MoveReq{
+			X: 4,
+			Y: 2,
+		}
+	case "iron":
+		coords = models.MoveReq{
+			X: 1,
+			Y: 7,
+		}
 	}
 
-	go c.gatherCopper(char)
+	err := c.goToSpot(coords, char)
+	if err != nil {
+		return fmt.Errorf("failed to go to %s: %w", resource, err)
+	}
+
+	c.Client.BotRunning[char] = true
+
+	go c.gather(char)
 
 	return nil
 }
 
-func (c *ClientWrapper) goToCopper(char string) error {
+func (c *ClientWrapper) goToResource(coords models.MoveReq, char string) error {
 	req := models.MoveReq{
-		X: 2,
-		Y: 0,
+		X: coords.X,
+		Y: coords.Y,
 	}
 
 	body, err := json.Marshal(req)
@@ -43,14 +63,14 @@ func (c *ClientWrapper) goToCopper(char string) error {
 		return fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
-	fmt.Println("Moving to copper...")
+	fmt.Println("Moving to resource...")
 
 	time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
 
 	return nil
 }
 
-func (c *ClientWrapper) gatherCopper(char string) {
+func (c *ClientWrapper) gather(char string) {
 	for c.Client.BotRunning[char] {
 		resp, err := c.Client.PostReq("/my/"+char+"/action/gathering", []byte{})
 		if err != nil {
@@ -73,5 +93,5 @@ func (c *ClientWrapper) gatherCopper(char string) {
 
 		time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
 	}
-	fmt.Printf("\rMining copper for %s stopped              \n", char)
+	fmt.Printf("\rGather bot for %s stopped              \n", char)
 }

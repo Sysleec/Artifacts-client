@@ -9,8 +9,6 @@ import (
 )
 
 func (c *ClientWrapper) Fighting(monster, char string) error {
-	c.Client.BotRunning[char] = true
-
 	var coords models.MoveReq
 
 	switch monster {
@@ -50,6 +48,8 @@ func (c *ClientWrapper) Fighting(monster, char string) error {
 	if err != nil {
 		return fmt.Errorf("failed to go to %s: %w", monster, err)
 	}
+
+	c.Client.BotRunning[char] = true
 
 	go c.fight(char)
 

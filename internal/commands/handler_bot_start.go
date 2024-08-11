@@ -34,10 +34,20 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 	}
 
 	switch args[1] {
-	case "mining":
+	case "gather":
 		switch args[2] {
 		case "copper":
-			err := client.MiningCopper(character)
+			err := client.Gather("copper", character)
+			if err != nil {
+				return fmt.Errorf("failed to mining copper: %w", err)
+			}
+		case "gudgeon":
+			err := client.Gather("gudgeon", character)
+			if err != nil {
+				return fmt.Errorf("failed to mining copper: %w", err)
+			}
+		case "iron":
+			err := client.Gather("iron", character)
 			if err != nil {
 				return fmt.Errorf("failed to mining copper: %w", err)
 			}
