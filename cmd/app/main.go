@@ -13,6 +13,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"image/color"
+	"net/url"
 )
 
 func main() {
@@ -22,6 +23,8 @@ func main() {
 	w.Resize(fyne.NewSize(500, 500))
 	w.CenterOnScreen()
 
+	var addAccountContent *fyne.Container
+	var accountContent *fyne.Container
 	var accs []accounts.Account
 
 	DB, err := gorm.Open(sqlite.Open("artifacts.db"), &gorm.Config{})
@@ -31,29 +34,62 @@ func main() {
 	DB.Find(&accs)
 
 	noAccountsLabel := canvas.NewText("No accounts found", color.Black)
-
 	if len(accs) == 0 {
 		noAccountsLabel.Hide()
 	}
 
-	newTaskIcon, err := fyne.LoadResourceFromPath("internal/icons/add.png")
+	accCreateMsg1 := widget.NewLabel("You need to enter your token to start using the client.")
+	accCreateMsg2 := widget.NewHyperlink("You can get it here", &url.URL{Scheme: "https", Host: "artifactsmmo.com/account"})
+	nameText := widget.NewLabel("Account name (optional)")
+	nameEntry := widget.NewEntry()
+	tokenText := widget.NewLabel("Token")
+	tokenEntry := widget.NewPasswordEntry()
+	btnLogin := widget.NewButton("Add account", accounts.AddAccountButton(DB, &nameEntry.Text, &tokenEntry.Text))
+
+	newAccIcon, err := fyne.LoadResourceFromPath("internal/icons/add.png")
+	backIcon, err := fyne.LoadResourceFromPath("internal/icons/back.png")
 
 	accountsBar := container.NewHBox(
 		canvas.NewText(" Accounts", color.Black),
 		layout.NewSpacer(),
-		widget.NewButtonWithIcon(" Add", newTaskIcon, func() {
-			log.Info().Msg("Add account")
+		widget.NewButtonWithIcon(" Add", newAccIcon, func() {
+			w.SetContent(addAccountContent)
 		}),
 	)
 
-	//container := accounts.CheckOrCreateAccounts(DB)
+	addAccountBar := container.NewHBox(
+		canvas.NewText(" Add account", color.Black),
+		layout.NewSpacer(),
+		widget.NewButtonWithIcon(" Back", backIcon, func() {
+			//nameEntry.SetText("")
+			//tokenEntry.SetText("")
+			//nameEntry.Refresh()
+			//tokenEntry.Refresh()
+
+			w.SetContent(accountContent)
+		}),
+	)
+
+	addAccountContent = container.NewVBox(
+		addAccountBar,
+		canvas.NewLine(color.Black),
+		accCreateMsg1,
+		accCreateMsg2,
+		nameText,
+		nameEntry,
+		tokenText,
+		tokenEntry,
+		btnLogin,
+	)
+
+	//_ = accounts.CheckOrCreateAccounts(DB)
 	//if err != nil {
 	//	return
 	//}
 
 	_ = DB
 
-	accountContent := container.NewVBox(
+	accountContent = container.NewVBox(
 		accountsBar,
 		canvas.NewLine(color.Black),
 		noAccountsLabel,
