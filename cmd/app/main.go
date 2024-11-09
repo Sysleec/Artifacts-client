@@ -30,7 +30,7 @@ func main() {
 		log.Fatal().Err(err).Msg("failed to load tokens")
 	}
 
-	err = DB.AutoMigrate(&dbmodels.Account{}, &dbmodels.Resource{}, &dbmodels.Drop{})
+	err = DB.AutoMigrate(&dbmodels.Account{}, &dbmodels.Resource{}, &dbmodels.Drop{}, dbmodels.Maps{})
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to migrate database")
 	}
