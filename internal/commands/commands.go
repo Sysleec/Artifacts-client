@@ -125,5 +125,10 @@ func List() map[string]cliCommand {
 			description: "Get all maps from the database",
 			Callback:    commandMapGet,
 		},
+		"bot auto start": {
+			name:        "bot auto start",
+			description: "Start automatic actions for all characters",
+			Callback:    commandBotAutoStart,
+		},
 	}
 }
