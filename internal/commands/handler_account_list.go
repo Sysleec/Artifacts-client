@@ -6,7 +6,7 @@ import (
 )
 
 func commandAccountList(cfg *models.Config, args ...string) error {
-	var accounts []models.Account
+	var accounts []models.AccountDB
 
 	cfg.DB.Find(&accounts)
 
@@ -17,7 +17,7 @@ func commandAccountList(cfg *models.Config, args ...string) error {
 	fmt.Println("Accounts:")
 
 	for _, acc := range accounts {
-		fmt.Printf("Account: %s (default: %t)\n", acc.Name, acc.IsDefault)
+		fmt.Printf("AccountDB: %s (default: %t)\n", acc.Name, acc.IsDefault)
 	}
 
 	return nil

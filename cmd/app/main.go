@@ -17,7 +17,7 @@ const (
 )
 
 func main() {
-	var accounts []models.Account
+	var accounts []models.AccountDB
 
 	DB, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
@@ -29,13 +29,13 @@ func main() {
 		log.Fatal().Err(err).Msg("failed to load tokens")
 	}
 
-	err = DB.AutoMigrate(&models.Account{})
+	err = DB.AutoMigrate(&models.AccountDB{})
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to migrate database")
 	}
 
 	for name, token := range tokens {
-		DB.FirstOrCreate(&models.Account{}, models.Account{Name: name, Token: token})
+		DB.FirstOrCreate(&models.AccountDB{}, models.AccountDB{Name: name, Token: token})
 	}
 
 	DB.Find(&accounts)
@@ -43,7 +43,7 @@ func main() {
 		log.Fatal().Err(err).Msg("No accounts found. Please add an account to config.ini")
 	}
 
-	defaultAcc := models.Account{}
+	defaultAcc := models.AccountDB{}
 
 	for _, acc := range accounts {
 		if acc.IsDefault {

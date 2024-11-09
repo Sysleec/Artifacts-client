@@ -8,6 +8,10 @@ import (
 )
 
 func commandGetCharacter(cfg *models.Config, args ...string) error {
+	if len(args) != 1 {
+		return fmt.Errorf("expected exactly  argument, got %d", len(args))
+	}
+
 	characterName := args[0]
 
 	client := characters.ClientWrapper{Client: cfg.ApiClient}

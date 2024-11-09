@@ -105,5 +105,10 @@ func List() map[string]cliCommand {
 			description: "List all accounts",
 			Callback:    commandAccountList,
 		},
+		"account detail": {
+			name:        "account detail",
+			description: "Show account details",
+			Callback:    commandAccountDetail,
+		},
 	}
 }
