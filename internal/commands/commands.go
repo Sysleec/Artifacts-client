@@ -95,5 +95,15 @@ func List() map[string]cliCommand {
 			description: "Exit the Artifacts client",
 			Callback:    commandExit,
 		},
+		"account set": {
+			name:        "account set {name}",
+			description: "Set the active account",
+			Callback:    commandAccountSet,
+		},
+		"account list": {
+			name:        "account list",
+			description: "List all accounts",
+			Callback:    commandAccountList,
+		},
 	}
 }

@@ -1,121 +1,62 @@
 package main
 
 import (
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/canvas"
-	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/layout"
-	"fyne.io/fyne/v2/theme"
-	"fyne.io/fyne/v2/widget"
-	"github.com/Sysleec/Artifacts-client/internal/accounts"
+	"github.com/Sysleec/Artifacts-client/internal/artsapi"
+	"github.com/Sysleec/Artifacts-client/internal/models"
+	"github.com/Sysleec/Artifacts-client/internal/repl"
+	"github.com/Sysleec/Artifacts-client/internal/utils"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"image/color"
-	"net/url"
+	"time"
+)
+
+const (
+	httpTimeout = 5 * time.Second
+	dbPath      = "./artifacts.db"
 )
 
 func main() {
-	a := app.New()
-	a.Settings().SetTheme(theme.LightTheme())
-	w := a.NewWindow("Artifacts GUI client")
-	w.Resize(fyne.NewSize(500, 500))
-	w.CenterOnScreen()
+	var accounts []models.Account
 
-	var addAccountContent *fyne.Container
-	var accountContent *fyne.Container
-	var accs []accounts.Account
-
-	DB, err := gorm.Open(sqlite.Open("artifacts.db"), &gorm.Config{})
+	DB, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
-		log.Fatal().Err(err).Msg("failed to connect database")
-	}
-	DB.Find(&accs)
-
-	noAccountsLabel := canvas.NewText("No accounts found", color.Black)
-	if len(accs) == 0 {
-		noAccountsLabel.Hide()
+		log.Fatal().Err(err).Msg("failed to open database")
 	}
 
-	accCreateMsg1 := widget.NewLabel("You need to enter your token to start using the client.")
-	accCreateMsg2 := widget.NewHyperlink("You can get it here", &url.URL{Scheme: "https", Host: "artifactsmmo.com/account"})
-	nameText := widget.NewLabel("Account name (optional)")
-	nameEntry := widget.NewEntry()
-	tokenText := widget.NewLabel("Token")
-	tokenEntry := widget.NewPasswordEntry()
-	btnLogin := widget.NewButton("Add account", accounts.AddAccountButton(DB, &nameEntry.Text, &tokenEntry.Text))
+	tokens, err := utils.LoadTokens()
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to load tokens")
+	}
 
-	newAccIcon, err := fyne.LoadResourceFromPath("internal/icons/add.png")
-	backIcon, err := fyne.LoadResourceFromPath("internal/icons/back.png")
+	err = DB.AutoMigrate(&models.Account{})
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to migrate database")
+	}
 
-	accountsBar := container.NewHBox(
-		canvas.NewText(" Accounts", color.Black),
-		layout.NewSpacer(),
-		widget.NewButtonWithIcon(" Add", newAccIcon, func() {
-			w.SetContent(addAccountContent)
-		}),
-	)
+	for name, token := range tokens {
+		DB.FirstOrCreate(&models.Account{}, models.Account{Name: name, Token: token})
+	}
 
-	addAccountBar := container.NewHBox(
-		canvas.NewText(" Add account", color.Black),
-		layout.NewSpacer(),
-		widget.NewButtonWithIcon(" Back", backIcon, func() {
-			//nameEntry.SetText("")
-			//tokenEntry.SetText("")
-			//nameEntry.Refresh()
-			//tokenEntry.Refresh()
+	DB.Find(&accounts)
+	if len(accounts) == 0 {
+		log.Fatal().Err(err).Msg("No accounts found. Please add an account to config.ini")
+	}
 
-			w.SetContent(accountContent)
-		}),
-	)
+	defaultAcc := models.Account{}
 
-	addAccountContent = container.NewVBox(
-		addAccountBar,
-		canvas.NewLine(color.Black),
-		accCreateMsg1,
-		accCreateMsg2,
-		nameText,
-		nameEntry,
-		tokenText,
-		tokenEntry,
-		btnLogin,
-	)
+	for _, acc := range accounts {
+		if acc.IsDefault {
+			defaultAcc = acc
+			break
+		}
+	}
 
-	//_ = accounts.CheckOrCreateAccounts(DB)
-	//if err != nil {
-	//	return
-	//}
+	apiClient := artsapi.NewClient(httpTimeout, defaultAcc.Token)
 
-	_ = DB
-
-	accountContent = container.NewVBox(
-		accountsBar,
-		canvas.NewLine(color.Black),
-		noAccountsLabel,
-	)
-
-	w.SetContent(accountContent)
-	w.Show()
-	a.Run()
-
-	//apiClient := artsapi.NewClient(60*time.Second, createAccounts[0].Token)
-	//
-	//cfg := models.Config{
-	//	ApiClient: &apiClient,
-	//	DB:        DB,
-	//}
-	//repl.Run(&cfg)
+	cfg := models.Config{
+		ApiClient: &apiClient,
+		DB:        DB,
+	}
+	repl.Run(&cfg)
 }
-
-//func main() {
-//	fmt.Println("Welcome to the Artifacts client!")
-//	fmt.Println("Type 'help' for a list of available commands")
-//
-//	tok, err := utils.LoadToken()
-//	if err != nil {
-//		fmt.Println(err)
-//		return
-//	}
-//
-//}

@@ -26,6 +26,10 @@ func NewClient(interval time.Duration, token string) Client {
 	}
 }
 
+func (c *Client) SetToken(token string) {
+	c.token = token
+}
+
 func (c *Client) PostReq(path string, body []byte) ([]byte, error) {
 	url := baseURL + path
 

@@ -3,29 +3,31 @@ package utils
 import (
 	"fmt"
 	"gopkg.in/ini.v1"
+	"strings"
 )
 
-func LoadToken() (string, error) {
+func LoadTokens() (map[string]string, error) {
 	iniData, err := ini.Load("config.ini")
 	if err != nil {
-		return "", fmt.Errorf("failed to load config file: %w", err)
+		return nil, fmt.Errorf("failed to load config file: %w", err)
 	}
 
 	localConfig, err := ini.Load("config.local.ini")
 	if err == nil {
-		return loadTokenFromIni(localConfig)
+		return loadTokensFromIni(localConfig)
 	}
 
-	return loadTokenFromIni(iniData)
+	return loadTokensFromIni(iniData)
 }
 
-func loadTokenFromIni(iniData *ini.File) (string, error) {
-	generalSection := iniData.Section("General")
+func loadTokensFromIni(iniData *ini.File) (map[string]string, error) {
+	generalSection := iniData.Section("ACCOUNTS")
 
-	tokenValue := generalSection.Key("TOKEN").String()
+	result := make(map[string]string)
 
-	if tokenValue == "" || tokenValue == "ACCOUNT_TOKEN" {
-		return "", fmt.Errorf("please provide a valid token in the config.ini file")
+	for _, section := range generalSection.Keys() {
+		result[strings.ToLower(section.Name())] = section.Value()
 	}
-	return tokenValue, nil
+
+	return result, nil
 }
