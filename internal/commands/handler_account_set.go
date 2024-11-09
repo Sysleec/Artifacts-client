@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"github.com/Sysleec/Artifacts-client/internal/models"
+	dbmodels "github.com/Sysleec/Artifacts-client/internal/models/DB"
 )
 
 func commandAccountSet(cfg *models.Config, args ...string) error {
@@ -12,9 +13,9 @@ func commandAccountSet(cfg *models.Config, args ...string) error {
 
 	accountName := args[0]
 
-	var account models.AccountDB
+	var account dbmodels.Account
 
-	cfg.DB.Model(&models.AccountDB{}).Update("is_default", false)
+	cfg.DB.Model(&dbmodels.Account{}).Update("is_default", false)
 
 	if err := cfg.DB.Where("name = ?", accountName).First(&account).Error; err != nil {
 		return fmt.Errorf("account %s not found", accountName)

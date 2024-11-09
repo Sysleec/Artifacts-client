@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/Sysleec/Artifacts-client/internal/artsapi"
 	"github.com/Sysleec/Artifacts-client/internal/models"
+	dbmodels "github.com/Sysleec/Artifacts-client/internal/models/DB"
 	"github.com/Sysleec/Artifacts-client/internal/repl"
 	"github.com/Sysleec/Artifacts-client/internal/utils"
 	"github.com/rs/zerolog/log"
@@ -17,7 +18,7 @@ const (
 )
 
 func main() {
-	var accounts []models.AccountDB
+	var accounts []dbmodels.Account
 
 	DB, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
@@ -29,13 +30,13 @@ func main() {
 		log.Fatal().Err(err).Msg("failed to load tokens")
 	}
 
-	err = DB.AutoMigrate(&models.AccountDB{})
+	err = DB.AutoMigrate(&dbmodels.Account{})
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to migrate database")
 	}
 
 	for name, token := range tokens {
-		DB.FirstOrCreate(&models.AccountDB{}, models.AccountDB{Name: name, Token: token})
+		DB.FirstOrCreate(&dbmodels.Account{}, dbmodels.Account{Name: name, Token: token})
 	}
 
 	DB.Find(&accounts)
@@ -43,7 +44,7 @@ func main() {
 		log.Fatal().Err(err).Msg("No accounts found. Please add an account to config.ini")
 	}
 
-	defaultAcc := models.AccountDB{}
+	defaultAcc := dbmodels.Account{}
 
 	for _, acc := range accounts {
 		if acc.IsDefault {
@@ -58,5 +59,6 @@ func main() {
 		ApiClient: &apiClient,
 		DB:        DB,
 	}
+
 	repl.Run(&cfg)
 }

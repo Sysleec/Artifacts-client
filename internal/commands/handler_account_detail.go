@@ -6,7 +6,7 @@ import (
 	"github.com/Sysleec/Artifacts-client/internal/models"
 )
 
-func commandAccountDetail(cfg *models.Config, args ...string) error {
+func commandAccountDetail(cfg *models.Config, _ ...string) error {
 	client, err := account.NewClientWrapper(cfg.ApiClient)
 	if err != nil {
 		return fmt.Errorf("failed to action : %w", err)

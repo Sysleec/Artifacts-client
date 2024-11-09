@@ -1,16 +1,5 @@
 package models
 
-import (
-	"gorm.io/gorm"
-)
-
-type AccountDB struct {
-	gorm.Model
-	Name      string `gorm:"unique"`
-	Token     string `gorm:"unique"`
-	IsDefault bool   `gorm:"default:false"`
-}
-
 type Account struct {
 	Data struct {
 		Username           string `json:"username"`

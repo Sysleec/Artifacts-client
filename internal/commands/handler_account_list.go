@@ -3,10 +3,11 @@ package commands
 import (
 	"fmt"
 	"github.com/Sysleec/Artifacts-client/internal/models"
+	dbmodels "github.com/Sysleec/Artifacts-client/internal/models/DB"
 )
 
-func commandAccountList(cfg *models.Config, args ...string) error {
-	var accounts []models.AccountDB
+func commandAccountList(cfg *models.Config, _ ...string) error {
+	var accounts []dbmodels.Account
 
 	cfg.DB.Find(&accounts)
 
