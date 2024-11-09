@@ -16,3 +16,9 @@ type Maps struct {
 	Size  int `json:"size"`
 	Pages int `json:"pages"`
 }
+
+type ContentWithCoords struct {
+	Code string
+	X    int
+	Y    int
+}

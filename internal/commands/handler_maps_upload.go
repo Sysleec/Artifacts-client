@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func commandMapUpload(cfg *models.Config, args ...string) error {
+func commandMapUpload(cfg *models.Config, _ ...string) error {
 	fmt.Println("Uploading maps...")
 
 	maxPages := 1
