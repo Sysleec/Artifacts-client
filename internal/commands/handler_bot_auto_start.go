@@ -22,7 +22,7 @@ func commandBotAutoStart(cfg *models.Config, _ ...string) error {
 	}
 
 	for _, character := range myCharacters.Data {
-		err := commandBotStart(cfg, character.Name, "gather", "copper")
+		err := commandBotStart(cfg, character.Name, "fighting", "chicken")
 		if err != nil {
 			return fmt.Errorf("failed to start bot for character %s: %w", character.Name, err)
 		}

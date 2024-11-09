@@ -7,7 +7,7 @@ import (
 )
 
 func (c *ClientWrapper) GetItem(item string) (models.GeItem, error) {
-	resp, err := c.Client.GetReq("/ge/" + item)
+	resp, err := c.Client.GetReq(fmt.Sprintf("/grandexchange/orders?code=%s", item))
 	if err != nil {
 		return models.GeItem{}, fmt.Errorf("failed to send request: %w", err)
 	}

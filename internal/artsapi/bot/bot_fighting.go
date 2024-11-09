@@ -104,8 +104,11 @@ func (c *ClientWrapper) fight(char string) {
 
 		isMaxItems := utils.CheckMaxItems(models.ConvertToModelCharacter(action))
 		if isMaxItems {
-			fmt.Printf("\rFighting bot for character %s stopped			\n", char)
-			return
+			err := utils.BankAllItemsAndReturnToSpot(&models.Config{ApiClient: c.Client}, models.ConvertToModelCharacter(action))
+			if err != nil {
+				fmt.Printf("failed to bank all items: %s", err.Error())
+				return
+			}
 		}
 
 		time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)

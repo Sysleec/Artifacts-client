@@ -85,11 +85,11 @@ func (c *ClientWrapper) gather(char string) {
 			return
 		}
 
-		maxItems := utils.CheckMaxItems(models.ConvertToModelCharacter(action))
-		if maxItems {
-			err := utils.SellAllItemsAndReturnToSpot(&models.Config{ApiClient: c.Client}, models.ConvertToModelCharacter(action))
+		isMaxItems := utils.CheckMaxItems(models.ConvertToModelCharacter(action))
+		if isMaxItems {
+			err := utils.BankAllItemsAndReturnToSpot(&models.Config{ApiClient: c.Client}, models.ConvertToModelCharacter(action))
 			if err != nil {
-				fmt.Printf("failed to sell all items: %s", err.Error())
+				fmt.Printf("failed to bank all items: %s", err.Error())
 				return
 			}
 		}

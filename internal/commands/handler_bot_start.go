@@ -30,7 +30,11 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 
 	isMaxItems := utils.CheckMaxItems(char)
 	if isMaxItems {
-		return fmt.Errorf("character %s has max items", character)
+		fmt.Printf("character %s has max items\n", character)
+		err := utils.BankAllItemsAndReturnToSpot(cfg, char)
+		if err != nil {
+			return err
+		}
 	}
 
 	switch args[1] {
