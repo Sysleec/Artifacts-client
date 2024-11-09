@@ -130,5 +130,10 @@ func List() map[string]cliCommand {
 			description: "Start automatic actions for all characters",
 			Callback:    commandBotAutoStart,
 		},
+		"bot auto stop": {
+			name:        "bot auto stop",
+			description: "Stop automatic actions for all characters",
+			Callback:    commandBotAutoStop,
+		},
 	}
 }

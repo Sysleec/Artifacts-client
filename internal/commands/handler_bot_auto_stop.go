@@ -6,7 +6,7 @@ import (
 	"github.com/Sysleec/Artifacts-client/internal/models"
 )
 
-func commandBotAutoStart(cfg *models.Config, _ ...string) error {
+func commandBotAutoStop(cfg *models.Config, _ ...string) error {
 	clientWrapper, err := characters.NewClientWrapper(cfg.ApiClient)
 	if err != nil {
 		return fmt.Errorf("failed to create client wrapper: %w", err)

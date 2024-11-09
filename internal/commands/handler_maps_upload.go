@@ -30,6 +30,10 @@ func commandMapUpload(cfg *models.Config, _ ...string) error {
 		maxPages = maps.Pages
 
 		for _, mapsData := range maps.Data {
+			time.Sleep(30 * time.Millisecond)
+			if mapsData.Content.Type == "" || mapsData.Content.Code == "" {
+				continue
+			}
 			maps := dbmodels.Maps{
 				Name: mapsData.Name,
 				Skin: mapsData.Skin,
