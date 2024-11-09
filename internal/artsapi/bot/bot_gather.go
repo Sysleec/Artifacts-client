@@ -85,6 +85,8 @@ func (c *ClientWrapper) gather(char string) {
 			return
 		}
 
+		time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
+
 		isMaxItems := utils.CheckMaxItems(models.ConvertToModelCharacter(action))
 		if isMaxItems {
 			err := utils.BankAllItemsAndReturnToSpot(&models.Config{ApiClient: c.Client}, models.ConvertToModelCharacter(action))
@@ -93,8 +95,6 @@ func (c *ClientWrapper) gather(char string) {
 				return
 			}
 		}
-
-		time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
 	}
 	fmt.Printf("\rGather bot for %s stopped              \n", char)
 }

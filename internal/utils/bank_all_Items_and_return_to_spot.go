@@ -15,10 +15,6 @@ func BankAllItemsAndReturnToSpot(cfg *models.Config, char models.Character) erro
 		return fmt.Errorf("failed to action : %w", err)
 	}
 
-	if char.Cooldown > 0 {
-		time.Sleep(time.Duration(char.Cooldown) * time.Second)
-	}
-
 	var actionMove models.Action
 
 	act, err := client.Move(models.MoveReq{
