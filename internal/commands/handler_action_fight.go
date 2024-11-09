@@ -36,9 +36,9 @@ func commandFight(cfg *models.Config, args ...string) error {
 
 	fmt.Print("\rCooldown complete!              \n")
 
-	err = utils.CheckMaxItems(models.ConvertFightToModelCharacter(fight))
-	if err != nil {
-		return err
+	isMaxItems := utils.CheckMaxItems(models.ConvertFightToModelCharacter(fight))
+	if isMaxItems {
+		return fmt.Errorf("character %s has max items", fight)
 	}
 
 	return nil

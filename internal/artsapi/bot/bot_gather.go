@@ -85,10 +85,13 @@ func (c *ClientWrapper) gather(char string) {
 			return
 		}
 
-		err = utils.CheckMaxItems(models.ConvertToModelCharacter(action))
-		if err != nil {
-			fmt.Printf("\r%s\n", err.Error())
-			return
+		maxItems := utils.CheckMaxItems(models.ConvertToModelCharacter(action))
+		if maxItems {
+			err := utils.SellAllItemsAndReturnToSpot(&models.Config{ApiClient: c.Client}, models.ConvertToModelCharacter(action))
+			if err != nil {
+				fmt.Printf("failed to sell all items: %s", err.Error())
+				return
+			}
 		}
 
 		time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)

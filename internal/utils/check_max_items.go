@@ -5,7 +5,7 @@ import (
 	"github.com/Sysleec/Artifacts-client/internal/models"
 )
 
-func CheckMaxItems(character models.Character) error {
+func CheckMaxItems(character models.Character) bool {
 	maxItemsQty := character.InventoryMaxItems
 	itemsQty := 0
 
@@ -13,9 +13,10 @@ func CheckMaxItems(character models.Character) error {
 		itemsQty += item.Quantity
 	}
 
-	if itemsQty >= maxItemsQty {
-		return fmt.Errorf("max items reached: %d/%d \n", itemsQty, maxItemsQty)
+	if itemsQty+3 >= maxItemsQty {
+		fmt.Printf("Character %s has reached the maximum number of items\n", character.Name)
+		return true
 	}
 
-	return nil
+	return false
 }

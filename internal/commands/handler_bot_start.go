@@ -28,9 +28,9 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 		return fmt.Errorf("failed to check character: %w", err)
 	}
 
-	err = utils.CheckMaxItems(char)
-	if err != nil {
-		return err
+	isMaxItems := utils.CheckMaxItems(char)
+	if isMaxItems {
+		return fmt.Errorf("character %s has max items", character)
 	}
 
 	switch args[1] {

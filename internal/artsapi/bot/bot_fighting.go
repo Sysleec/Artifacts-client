@@ -102,9 +102,9 @@ func (c *ClientWrapper) fight(char string) {
 			return
 		}
 
-		err = utils.CheckMaxItems(models.ConvertToModelCharacter(action))
-		if err != nil {
-			fmt.Printf("\r%s\n", err.Error())
+		isMaxItems := utils.CheckMaxItems(models.ConvertToModelCharacter(action))
+		if isMaxItems {
+			fmt.Printf("\rFighting bot for character %s stopped			\n", char)
 			return
 		}
 
