@@ -110,5 +110,10 @@ func List() map[string]cliCommand {
 			description: "Show account details",
 			Callback:    commandAccountDetail,
 		},
+		"resources upload": {
+			name:        "resources upload",
+			description: "Upload all resources from API artifactsmmo",
+			Callback:    commandResourcesUpload,
+		},
 	}
 }
