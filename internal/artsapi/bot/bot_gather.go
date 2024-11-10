@@ -87,9 +87,9 @@ func (c *ClientWrapper) gather(char string) {
 
 		time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
 
-		isMaxItems := utils.CheckMaxItems(models.ConvertToModelCharacter(action))
+		isMaxItems := utils.CheckMaxItems(models.ConvertToModelActionToCharacter(action))
 		if isMaxItems {
-			err := utils.BankAllItemsAndReturnToSpot(&models.Config{ApiClient: c.Client}, models.ConvertToModelCharacter(action))
+			err := utils.BankAllItemsAndReturnToSpot(&models.Config{ApiClient: c.Client}, models.ConvertToModelActionToCharacter(action))
 			if err != nil {
 				fmt.Printf("failed to bank all items: %s", err.Error())
 				return

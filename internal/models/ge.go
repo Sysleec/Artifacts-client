@@ -11,7 +11,7 @@ type GeItem struct {
 	} `json:"data"`
 }
 
-type BankDepositReq struct {
+type BankReq struct {
 	Code     string `json:"code"`
 	Quantity int    `json:"quantity"`
 }

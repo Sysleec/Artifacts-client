@@ -36,7 +36,7 @@ func commandGather(cfg *models.Config, args ...string) error {
 
 	fmt.Print("\rCooldown complete!              \n")
 
-	isMaxItems := utils.CheckMaxItems(models.ConvertToModelCharacter(character))
+	isMaxItems := utils.CheckMaxItems(models.ConvertToModelActionToCharacter(character))
 	if isMaxItems {
 		return fmt.Errorf("character %s has max items", character)
 	}

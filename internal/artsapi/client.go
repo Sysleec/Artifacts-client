@@ -11,7 +11,7 @@ import (
 
 type Client struct {
 	httpClient http.Client
-	token      string
+	Token      string
 	Character  string
 	BotRunning map[string]bool
 }
@@ -21,13 +21,13 @@ func NewClient(interval time.Duration, token string) Client {
 		httpClient: http.Client{
 			Timeout: interval,
 		},
-		token:      token,
+		Token:      token,
 		BotRunning: make(map[string]bool),
 	}
 }
 
 func (c *Client) SetToken(token string) {
-	c.token = token
+	c.Token = token
 }
 
 func (c *Client) PostReq(path string, body []byte) ([]byte, error) {
@@ -40,7 +40,7 @@ func (c *Client) PostReq(path string, body []byte) ([]byte, error) {
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.token))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token))
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -77,7 +77,7 @@ func (c *Client) GetReq(path string) ([]byte, error) {
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.token))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token))
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {

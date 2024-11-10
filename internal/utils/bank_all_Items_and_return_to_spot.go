@@ -15,6 +15,12 @@ func BankAllItemsAndReturnToSpot(cfg *models.Config, char models.Character) erro
 		return fmt.Errorf("failed to action : %w", err)
 	}
 
+	secondsRemaining := char.Cooldown
+	fmt.Printf("Waiting for %d seconds\n", secondsRemaining)
+
+	time.Sleep(time.Duration(secondsRemaining) * time.Second)
+	time.Sleep(time.Second)
+
 	var actionMove models.Action
 
 	act, err := client.Move(models.MoveReq{
@@ -28,14 +34,11 @@ func BankAllItemsAndReturnToSpot(cfg *models.Config, char models.Character) erro
 
 	fmt.Printf("Moved character to x = %d, y = %d\n", actionMove.Data.Destination.X, actionMove.Data.Destination.Y)
 
-	secondsRemaining := actionMove.Data.Cooldown.TotalSeconds
+	secondsRemaining = actionMove.Data.Cooldown.TotalSeconds
 	fmt.Printf("Waiting for %d seconds\n", secondsRemaining)
 
-	for secondsRemaining > 0 {
-		fmt.Printf("\rTime left: %d seconds", secondsRemaining)
-		time.Sleep(1 * time.Second)
-		secondsRemaining--
-	}
+	time.Sleep(time.Duration(secondsRemaining) * time.Second)
+	time.Sleep(time.Second)
 
 	fmt.Print("\rCooldown complete!              \n")
 
@@ -48,22 +51,20 @@ func BankAllItemsAndReturnToSpot(cfg *models.Config, char models.Character) erro
 		if item.Code == "tasks_coin" || item.Code == "Tasks Coin" || item.Quantity == 0 {
 			continue
 		}
-		bankTrans, err := geClient.DepositItem(models.BankDepositReq{
+
+		bankTrans, err := geClient.DepositItem(models.BankReq{
 			Code:     item.Code,
 			Quantity: item.Quantity,
 		})
 		if err != nil {
-			return fmt.Errorf("failed to get Grand Exchange item : %w", err)
+			return fmt.Errorf("failed to deposit Grand Exchange item : %w", err)
 		}
 
 		secondsRemaining = bankTrans.Data.Cooldown.TotalSeconds
 		fmt.Printf("Waiting for %d seconds\n", secondsRemaining)
 
-		for secondsRemaining > 0 {
-			fmt.Printf("\rTime left: %d seconds", secondsRemaining)
-			time.Sleep(1 * time.Second)
-			secondsRemaining--
-		}
+		time.Sleep(time.Duration(secondsRemaining) * time.Second)
+		time.Sleep(time.Second)
 
 		fmt.Print("\rCooldown complete!              \n")
 	}
@@ -78,7 +79,11 @@ func BankAllItemsAndReturnToSpot(cfg *models.Config, char models.Character) erro
 		return err
 	}
 
-	time.Sleep(time.Duration(move.Data.Cooldown.RemainingSeconds) * time.Second)
+	secondsRemaining = move.Data.Cooldown.TotalSeconds
+	fmt.Printf("Waiting for %d seconds\n", secondsRemaining)
+
+	time.Sleep(time.Duration(secondsRemaining) * time.Second)
+	time.Sleep(time.Second)
 
 	return nil
 }

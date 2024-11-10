@@ -2,8 +2,10 @@ package commands
 
 import (
 	"fmt"
+	"github.com/Sysleec/Artifacts-client/internal/artsapi"
 	"github.com/Sysleec/Artifacts-client/internal/artsapi/characters"
 	"github.com/Sysleec/Artifacts-client/internal/models"
+	"time"
 )
 
 func commandBotAutoStart(cfg *models.Config, _ ...string) error {
@@ -22,10 +24,19 @@ func commandBotAutoStart(cfg *models.Config, _ ...string) error {
 	}
 
 	for _, character := range myCharacters.Data {
-		err := commandBotStart(cfg, character.Name, "gather", "copper")
-		if err != nil {
-			return fmt.Errorf("failed to start bot for character %s: %w", character.Name, err)
-		}
+		go func() {
+			client := artsapi.NewClient(5*time.Second, cfg.ApiClient.Token)
+			newCfg := models.Config{
+				ApiClient: &client,
+				DB:        cfg.DB,
+			}
+
+			err := commandBotStart(&newCfg, character.Name, "fighting", "chicken")
+			if err != nil {
+				fmt.Printf("failed to start bot for character %s: %v\n", character.Name, err)
+			}
+		}()
+
 	}
 
 	fmt.Println("Auto bot for all characters started")

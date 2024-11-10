@@ -95,22 +95,35 @@ func (c *ClientWrapper) fight(char string) {
 			return
 		}
 
-		var action models.Action
-		err = json.Unmarshal(resp, &action)
+		var fight models.Fight
+		err = json.Unmarshal(resp, &fight)
 		if err != nil {
 			fmt.Printf("failed to unmarshal response: %s", err.Error())
 			return
 		}
 
-		time.Sleep(time.Duration(action.Data.Cooldown.TotalSeconds) * time.Second)
+		time.Sleep(time.Duration(fight.Data.Cooldown.TotalSeconds) * time.Second)
 
-		isMaxItems := utils.CheckMaxItems(models.ConvertToModelCharacter(action))
+		isMaxItems := utils.CheckMaxItems(models.ConvertFightToModelCharacter(fight))
 		if isMaxItems {
-			err := utils.BankAllItemsAndReturnToSpot(&models.Config{ApiClient: c.Client}, models.ConvertToModelCharacter(action))
+			err := utils.BankAllItemsAndReturnToSpot(&models.Config{ApiClient: c.Client}, models.ConvertFightToModelCharacter(fight))
 			if err != nil {
 				fmt.Printf("failed to bank all items: %s", err.Error())
 				return
 			}
+		}
+
+		percent := fight.Data.Character.MaxHp * 30 / 100
+
+		if fight.Data.Character.Hp < percent {
+			_, err := c.Client.PostReq("/my/"+char+"/action/rest", []byte{})
+			if err != nil {
+				fmt.Printf("failed to send request: %s", err.Error())
+				return
+			}
+
+			remainingSeconds := ((fight.Data.Character.MaxHp - fight.Data.Character.Hp) / 5) + 1
+			time.Sleep(time.Duration(remainingSeconds) * time.Second)
 		}
 	}
 	fmt.Printf("\rFighting bot for character %s stopped			\n", char)

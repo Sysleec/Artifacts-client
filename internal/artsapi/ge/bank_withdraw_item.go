@@ -6,13 +6,13 @@ import (
 	"github.com/Sysleec/Artifacts-client/internal/models"
 )
 
-func (c ClientWrapper) DepositItem(req models.BankReq) (models.BankTransaction, error) {
+func (c ClientWrapper) WithdrawItem(req models.BankReq) (models.BankTransaction, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return models.BankTransaction{}, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	resp, err := c.Client.PostReq("/my/"+c.Client.Character+"/action/bank/deposit", body)
+	resp, err := c.Client.PostReq("/my/"+c.Client.Character+"/action/bank/withdraw", body)
 	if err != nil {
 		return models.BankTransaction{}, fmt.Errorf("failed to send request: %w", err)
 	}

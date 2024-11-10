@@ -5,6 +5,7 @@ import (
 	"github.com/Sysleec/Artifacts-client/internal/artsapi/bot"
 	"github.com/Sysleec/Artifacts-client/internal/models"
 	"github.com/Sysleec/Artifacts-client/internal/utils"
+	"time"
 )
 
 func commandBotStart(cfg *models.Config, args ...string) error {
@@ -35,6 +36,18 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 		if err != nil {
 			return err
 		}
+	}
+
+	percent := char.MaxHp * 30 / 100
+
+	if char.Hp < percent {
+		_, err := client.Client.PostReq("/my/"+char.Name+"/action/rest", []byte{})
+		if err != nil {
+			return fmt.Errorf("failed to send request: %s", err.Error())
+		}
+
+		remainingSeconds := ((char.MaxHp - char.Hp) / 5) + 1
+		time.Sleep(time.Duration(remainingSeconds) * time.Second)
 	}
 
 	switch args[1] {
@@ -89,6 +102,14 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 			err := client.Fighting("red_slime", character)
 			if err != nil {
 				return fmt.Errorf("failed to fighting chicken: %w", err)
+			}
+		}
+	case "craft":
+		switch args[2] {
+		case "copper_bar":
+			err := utils.CraftCopperAndDeposit(cfg, char)
+			if err != nil {
+				return err
 			}
 		}
 	default:
