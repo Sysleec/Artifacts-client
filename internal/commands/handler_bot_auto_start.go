@@ -8,7 +8,11 @@ import (
 	"time"
 )
 
-func commandBotAutoStart(cfg *models.Config, _ ...string) error {
+func commandBotAutoStart(cfg *models.Config, args ...string) error {
+	if len(args) != 2 {
+		return fmt.Errorf("expected exactly 2 arguments, got %d", len(args))
+	}
+
 	clientWrapper, err := characters.NewClientWrapper(cfg.ApiClient)
 	if err != nil {
 		return fmt.Errorf("failed to create client wrapper: %w", err)
@@ -23,6 +27,8 @@ func commandBotAutoStart(cfg *models.Config, _ ...string) error {
 		return fmt.Errorf("no characters found")
 	}
 
+	action, resourse := args[0], args[1]
+
 	for _, character := range myCharacters.Data {
 		go func() {
 			client := artsapi.NewClient(5*time.Second, cfg.ApiClient.Token)
@@ -31,7 +37,7 @@ func commandBotAutoStart(cfg *models.Config, _ ...string) error {
 				DB:        cfg.DB,
 			}
 
-			err := commandBotStart(&newCfg, character.Name, "fighting", "chicken")
+			err := commandBotStart(&newCfg, character.Name, action, resourse)
 			if err != nil {
 				fmt.Printf("failed to start bot for character %s: %v\n", character.Name, err)
 			}

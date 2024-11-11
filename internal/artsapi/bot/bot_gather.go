@@ -27,6 +27,11 @@ func (c *ClientWrapper) Gather(resource, char string) error {
 			X: 1,
 			Y: 7,
 		}
+	case "ash_tree":
+		coords = models.MoveReq{
+			X: 6,
+			Y: 1,
+		}
 	}
 
 	err := c.goToSpot(coords, char)

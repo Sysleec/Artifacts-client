@@ -38,7 +38,7 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 		}
 	}
 
-	percent := char.MaxHp * 30 / 100
+	percent := char.MaxHp * 40 / 100
 
 	if char.Hp < percent {
 		_, err := client.Client.PostReq("/my/"+char.Name+"/action/rest", []byte{})
@@ -65,6 +65,11 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 			}
 		case "iron":
 			err := client.Gather("iron", character)
+			if err != nil {
+				return fmt.Errorf("failed to mining copper: %w", err)
+			}
+		case "ash_tree":
+			err := client.Gather("ash_tree", character)
 			if err != nil {
 				return fmt.Errorf("failed to mining copper: %w", err)
 			}

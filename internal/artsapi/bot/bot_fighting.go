@@ -113,7 +113,7 @@ func (c *ClientWrapper) fight(char string) {
 			}
 		}
 
-		percent := fight.Data.Character.MaxHp * 30 / 100
+		percent := fight.Data.Character.MaxHp * 40 / 100
 
 		if fight.Data.Character.Hp < percent {
 			_, err := c.Client.PostReq("/my/"+char+"/action/rest", []byte{})

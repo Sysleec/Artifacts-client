@@ -22,10 +22,7 @@ func commandBotAutoStop(cfg *models.Config, _ ...string) error {
 	}
 
 	for _, character := range myCharacters.Data {
-		err := commandBotStart(cfg, character.Name, "gather", "copper")
-		if err != nil {
-			return fmt.Errorf("failed to start bot for character %s: %w", character.Name, err)
-		}
+		cfg.ApiClient.BotRunning[character.Name] = false
 	}
 
 	fmt.Println("Auto bot for all characters started")
