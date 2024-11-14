@@ -73,6 +73,11 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 			if err != nil {
 				return fmt.Errorf("failed to mining copper: %w", err)
 			}
+		case "spruce_wood":
+			err := client.Gather("spruce_wood", character)
+			if err != nil {
+				return fmt.Errorf("failed to mining copper: %w", err)
+			}
 		default:
 			return fmt.Errorf("unknown target: %s", args[2])
 		}
@@ -113,6 +118,11 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 		switch args[2] {
 		case "copper_bar":
 			err := utils.CraftCopperAndDeposit(cfg, char)
+			if err != nil {
+				return err
+			}
+		case "iron":
+			err := utils.CraftIronAndDeposit(cfg, char)
 			if err != nil {
 				return err
 			}
