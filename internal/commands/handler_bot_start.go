@@ -78,6 +78,11 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 			if err != nil {
 				return fmt.Errorf("failed to mining copper: %w", err)
 			}
+		case "sunflower":
+			err := client.Gather("sunflower", character)
+			if err != nil {
+				return fmt.Errorf("failed to fighting chicken: %w", err)
+			}
 		default:
 			return fmt.Errorf("unknown target: %s", args[2])
 		}
@@ -119,12 +124,38 @@ func commandBotStart(cfg *models.Config, args ...string) error {
 		case "copper_bar":
 			err := utils.CraftCopperAndDeposit(cfg, char)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to craft copper: %w", err)
 			}
 		case "iron":
 			err := utils.CraftIronAndDeposit(cfg, char)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to craft iron: %w", err)
+			}
+		case "cooked_chicken":
+			err := utils.CraftAndDeposit(cfg, char, models.CraftAndDeposit{
+				Resource:            "raw_chicken",
+				Result:              "cooked_chicken",
+				QtyResourceForCraft: 1,
+				Coords: models.MoveReq{
+					X: 1,
+					Y: 1,
+				},
+			})
+			if err != nil {
+				return fmt.Errorf("failed to craft cooked chicken: %w", err)
+			}
+		case "cooked_beef":
+			err := utils.CraftAndDeposit(cfg, char, models.CraftAndDeposit{
+				Resource:            "raw_beef",
+				Result:              "cooked_beef",
+				QtyResourceForCraft: 1,
+				Coords: models.MoveReq{
+					X: 1,
+					Y: 1,
+				},
+			})
+			if err != nil {
+				return fmt.Errorf("failed to craft cooked beef: %w", err)
 			}
 		}
 	default:

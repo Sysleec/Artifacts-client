@@ -459,3 +459,10 @@ type Action struct {
 		} `json:"character"`
 	} `json:"data"`
 }
+
+type CraftAndDeposit struct {
+	Resource            string
+	Result              string
+	QtyResourceForCraft int
+	Coords              MoveReq
+}
